@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="colorPrimary">#5cacee</color>
+    <color name="colorPrimaryDark">#1b8dea</color>
+    <color name="colorAccent">#536DFE</color>
+    <color name="bg_app">#F1F1F1</color>
+
+    <color name="tab_unselect">#c9c9c9</color>
+    <color name="bg_btn">#dadada</color>
+
+    <color name="colorBlue">#5cacee</color>
+    <color name="colorWhite">#ffffff</color>
+</resources>

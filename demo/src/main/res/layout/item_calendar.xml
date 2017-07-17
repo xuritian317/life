@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="50dp"
+    android:paddingLeft="70dp"
+    android:paddingRight="70dp">
+
+    <EditText
+        android:id="@+id/tv_mouth"
+        android:layout_width="0dp"
+        android:layout_height="match_parent"
+        android:layout_weight="1"
+        android:gravity="center|left"
+        android:inputType="number"
+        android:textColor="#9c9c9c"
+        android:textSize="15sp" />
+
+    <TextView
+        android:layout_width="0dp"
+        android:layout_height="match_parent"
+        android:layout_weight="1"
+        android:gravity="center|right"
+        android:paddingRight="30dp"
+        android:text="月"
+        android:textColor="#9c9c9c"
+        android:textSize="15sp" />
+
+    <EditText
+        android:id="@+id/tv_day"
+        android:layout_width="0dp"
+        android:layout_height="match_parent"
+        android:layout_weight="1"
+        android:gravity="center|left"
+        android:inputType="number"
+        android:textColor="#9c9c9c"
+        android:textSize="15sp" />
+
+    <TextView
+        android:layout_width="0dp"
+        android:layout_height="match_parent"
+        android:layout_weight="1"
+        android:gravity="center|right"
+        android:paddingRight="30dp"
+        android:text="日"
+        android:textColor="#9c9c9c"
+        android:textSize="15sp" />
+</LinearLayout>
