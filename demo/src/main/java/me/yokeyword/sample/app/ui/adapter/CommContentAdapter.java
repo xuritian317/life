@@ -19,6 +19,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import me.yokeyword.sample.R;
+import me.yokeyword.sample.app.model.entity.DataInfo;
 import me.yokeyword.sample.app.model.entity.DetailInfo;
 import me.yokeyword.sample.app.model.entity.ShareInfo;
 import me.yokeyword.sample.app.ui.customer.XValueFormat;

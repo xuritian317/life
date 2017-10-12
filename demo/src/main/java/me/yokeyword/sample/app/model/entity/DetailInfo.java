@@ -26,12 +26,9 @@ public class DetailInfo {
 
     public DetailInfo() {
     }
-
-
-    public DetailInfo(String objectId, String userName, String userTel, String type, String data, int values) {
-        ObjectId = objectId;
-        this.userName = userName;
+    public DetailInfo(String userTel,String userName,String type, String data, int values) {
         this.userTel = userTel;
+        this.userName = userName;
         this.type = type;
         this.data = data;
         this.values = values;

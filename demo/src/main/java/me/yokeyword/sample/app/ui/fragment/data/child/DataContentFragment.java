@@ -19,6 +19,7 @@ import me.yokeyword.sample.app.ui.listener.AdapterItemClickListener;
 import me.yokeyword.sample.app.base.BaseFragment;
 import me.yokeyword.sample.app.presenter.data.DataContentPresenter;
 import me.yokeyword.sample.app.ui.view.data.DataContentView;
+import me.yokeyword.sample.app.util.Logger;
 
 /**
  * Created by YoKeyword on 16/6/3.
@@ -30,6 +31,7 @@ public class DataContentFragment extends BaseFragment<DataContentPresenter> impl
     RecyclerView recyclerView;
     @BindView(R.id.refresh_layout)
     SwipeRefreshLayout mRefreshLayout;
+
 
     private DataContentAdapter mAdapter;
 
@@ -113,14 +115,15 @@ public class DataContentFragment extends BaseFragment<DataContentPresenter> impl
         recyclerView.setLayoutManager(manager);
         recyclerView.setAdapter(mAdapter);
 
+        mAdapter.setData(presenter.getData(mTypes,mTitles, mContents));
+
         mAdapter.setOnItemClickListener(new AdapterItemClickListener() {
             @Override
             public void onItemClick(int position, View view, RecyclerView.ViewHolder vh) {
                 presenter.start(DataDetailFragment.newInstance(mAdapter.getItem(position).getType()));
+//                Logger.e("mAdapter.getItem(position).getType())",mAdapter.getItem(position).getType());
             }
         });
-
-        mAdapter.setData(presenter.getData(mTypes,mTitles, mContents));
 
         recyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
             @Override

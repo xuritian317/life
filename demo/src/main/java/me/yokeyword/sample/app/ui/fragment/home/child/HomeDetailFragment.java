@@ -22,15 +22,16 @@ import butterknife.BindView;
 import butterknife.OnClick;
 import me.yokeyword.sample.R;
 import me.yokeyword.sample.app.db.DBManager;
-import me.yokeyword.sample.app.model.entity.HomePic;
-import me.yokeyword.sample.app.base.BaseBackFragment;
+import me.yokeyword.sample.app.model.entity.DataInfo;
 import me.yokeyword.sample.app.model.entity.DetailInfo;
 import me.yokeyword.sample.app.model.entity.DetailInfoDao;
+import me.yokeyword.sample.app.model.entity.HomePic;
+import me.yokeyword.sample.app.base.BaseBackFragment;
+import me.yokeyword.sample.app.model.entity.UserData;
 import me.yokeyword.sample.app.presenter.home.HomeDetailPresenter;
 import me.yokeyword.sample.app.ui.customer.XValueFormat;
-import me.yokeyword.sample.app.ui.fragment.community.CommunityFragment;
-import me.yokeyword.sample.app.util.Logger;
 import me.yokeyword.sample.app.ui.view.home.HomeDetailView;
+import me.yokeyword.sample.app.util.Logger;
 import me.yokeyword.sample.app.util.ToastUtils;
 
 /**
@@ -38,7 +39,7 @@ import me.yokeyword.sample.app.util.ToastUtils;
  */
 public class HomeDetailFragment extends BaseBackFragment<HomeDetailPresenter> implements HomeDetailView {
     private static final String TYPE = "type";
-
+    private String type;
     private HomePic mHomePic;
     private static HomeDetailFragment instance;
 
@@ -55,8 +56,10 @@ public class HomeDetailFragment extends BaseBackFragment<HomeDetailPresenter> im
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         Bundle bundle = getArguments();
-        if (bundle != null)
+        if (bundle != null) {
             mHomePic = getArguments().getParcelable(TYPE);
+            type = mHomePic.getType();
+        }
     }
 
     @BindView(R.id.toolbar)
@@ -72,10 +75,10 @@ public class HomeDetailFragment extends BaseBackFragment<HomeDetailPresenter> im
 
     @OnClick(R.id.tv_share)
     public void share() {
-        presenter.share(infoList);
+        presenter.share(detailInfos);
     }
 
-    private List<DetailInfo> infoList;
+    private List<DetailInfo> detailInfos;
 
     @Override
     public int getLayout() {
@@ -104,7 +107,7 @@ public class HomeDetailFragment extends BaseBackFragment<HomeDetailPresenter> im
         xAxis.setPosition(XAxis.XAxisPosition.BOTTOM);
         xAxis.setTextSize(5);
         xAxis.setDrawGridLines(false);
-        xAxis.setValueFormatter(new XValueFormat(infoList));
+        xAxis.setValueFormatter(new XValueFormat(detailInfos));
 
         barChart.getAxisRight().setEnabled(false);
         YAxis left = barChart.getAxisLeft();
@@ -112,7 +115,7 @@ public class HomeDetailFragment extends BaseBackFragment<HomeDetailPresenter> im
 
         barChart.getLegend().setEnabled(false);
 
-        presenter.setBarData(infoList);
+        presenter.setBarData(detailInfos);
     }
 
     public void initLineChart() {
@@ -121,7 +124,7 @@ public class HomeDetailFragment extends BaseBackFragment<HomeDetailPresenter> im
         xAxis.setPosition(XAxis.XAxisPosition.BOTTOM);
         xAxis.setTextSize(5);
         xAxis.setDrawGridLines(false);
-        xAxis.setValueFormatter(new XValueFormat(infoList));
+        xAxis.setValueFormatter(new XValueFormat(detailInfos));
 
 
         lineChart.getAxisRight().setEnabled(false);
@@ -130,7 +133,7 @@ public class HomeDetailFragment extends BaseBackFragment<HomeDetailPresenter> im
 
         lineChart.getLegend().setEnabled(false);
 
-        presenter.setLineData(infoList);
+        presenter.setLineData(detailInfos);
     }
 
     public void initPieChart() {
@@ -141,15 +144,15 @@ public class HomeDetailFragment extends BaseBackFragment<HomeDetailPresenter> im
         pieChart.getDescription().setEnabled(false);
         pieChart.setRotationEnabled(false);
 
-        presenter.setPieData(infoList);
+        presenter.setPieData(detailInfos);
     }
 
     @Override
     public void initData() {
-        infoList = new ArrayList<>();
+        detailInfos = new ArrayList<>();
         DetailInfoDao dao = DBManager.getInstance().detailInfoDao;
-        infoList = dao.queryBuilder().where(DetailInfoDao.Properties.Type.eq(mHomePic.getTitle())).list();
-        Logger.e("infoList", "" + infoList.size());
+        detailInfos = dao.queryBuilder().where(DetailInfoDao.Properties.Type.eq(mHomePic.getTitle())).list();
+        Logger.e("detailInfos", ""+detailInfos.size());
     }
 
     @Override

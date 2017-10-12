@@ -5,6 +5,7 @@ import com.github.mikephil.charting.data.BarData;
 import com.github.mikephil.charting.data.LineData;
 import com.github.mikephil.charting.data.PieData;
 
+import me.yokeyword.sample.app.model.entity.UserData;
 import me.yokeyword.sample.app.ui.view.BaseViewInterface;
 
 /**

@@ -6,7 +6,6 @@ import java.util.List;
 import cn.bmob.v3.exception.BmobException;
 import cn.bmob.v3.listener.UpdateListener;
 import me.yokeyword.sample.app.model.entity.DataInfo;
-import me.yokeyword.sample.app.model.entity.DetailInfo;
 import me.yokeyword.sample.app.model.entity.UserData;
 import me.yokeyword.sample.app.util.Logger;
 
@@ -53,15 +52,8 @@ public class BmobUpdateUserData {
         });
     }
 
-    public void updateUserDate(String objectId, List<DetailInfo> detailInfos) {
+    public void updateUserDate(String objectId, UserData data,List<DataInfo> dataInfos) {
 
-        UserData data = new UserData();
-
-        List<DataInfo> dataInfos = new ArrayList<>();
-
-        for (DetailInfo info : detailInfos) {
-            dataInfos.add(new DataInfo(info.getData(), info.getValues()));
-        }
         data.setData(dataInfos);
 
         data.update(objectId, new UpdateListener() {

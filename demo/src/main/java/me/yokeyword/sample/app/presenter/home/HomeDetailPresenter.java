@@ -1,5 +1,7 @@
 package me.yokeyword.sample.app.presenter.home;
 
+import com.github.mikephil.charting.components.XAxis;
+import com.github.mikephil.charting.components.YAxis;
 import com.github.mikephil.charting.data.BarData;
 import com.github.mikephil.charting.data.BarDataSet;
 import com.github.mikephil.charting.data.BarEntry;
@@ -12,14 +14,13 @@ import com.github.mikephil.charting.data.PieEntry;
 import com.github.mikephil.charting.formatter.IValueFormatter;
 import com.github.mikephil.charting.utils.ColorTemplate;
 import com.github.mikephil.charting.utils.ViewPortHandler;
-
 import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.List;
-
 import cn.bmob.v3.BmobUser;
 import cn.bmob.v3.exception.BmobException;
 import cn.bmob.v3.listener.SaveListener;
+import me.yokeyword.sample.app.model.entity.DataInfo;
 import me.yokeyword.sample.app.model.entity.DetailInfo;
 import me.yokeyword.sample.app.model.entity.ShareInfo;
 import me.yokeyword.sample.app.presenter.BasePresenter;
@@ -121,4 +122,6 @@ public class HomeDetailPresenter extends BasePresenter {
             }
         });
     }
+
+
 }

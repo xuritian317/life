@@ -38,7 +38,8 @@ public class BmobQueryUserData {
     private String userTel;
     private String userName;
 
-    public void getUserData(String type) {
+    public void getUserData(final String type) {
+//        Logger.e("type", type);
         UserInfo userInfo = BmobUser.getCurrentUser(UserInfo.class);
         userTel = userInfo.getMobilePhoneNumber();
         userName = userInfo.getUsername();
@@ -46,17 +47,13 @@ public class BmobQueryUserData {
         BmobQuery<UserData> query = new BmobQuery<>();
         query.addWhereEqualTo("userTel", userTel);
         query.addWhereEqualTo("type", type);
-        Logger.e("userTel", userTel);
+//        Logger.e("userTel", userTel);
 
         query.findObjects(new FindListener<UserData>() {
             @Override
             public void done(List<UserData> list, BmobException e) {
                 if (e == null) {
-                    List<UserData> data = new ArrayList<>();
-                    for (UserData info : list) {
-                        data.add(info);
-                    }
-                    callBack.successCallBack(userTel, userName, data);
+                    callBack.successCallBack(userTel, userName, type, list);
                 } else {
                     callBack.failCallBack(userTel, userName, e);
                 }
@@ -67,7 +64,7 @@ public class BmobQueryUserData {
 
     public interface QueryDataCallBack {
 
-        void successCallBack(String userTel, String userName, List<UserData> infoList);
+        void successCallBack(String userTel, String userName, String type, List<UserData> infoList);
 
         void failCallBack(String userTel, String userName, BmobException e);
     }

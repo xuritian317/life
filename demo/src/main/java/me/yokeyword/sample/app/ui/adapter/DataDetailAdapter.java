@@ -11,12 +11,13 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import me.yokeyword.sample.R;
-import me.yokeyword.sample.app.model.entity.DetailInfo;
+import me.yokeyword.sample.app.model.entity.DataInfo;
+import me.yokeyword.sample.app.model.entity.UserData;
 import me.yokeyword.sample.app.ui.listener.AdapterDateListener;
 import me.yokeyword.sample.app.ui.listener.AdapterItemClickListener;
 
 public class DataDetailAdapter extends RecyclerView.Adapter<DataDetailAdapter.ViewHolder> {
-    private List<DetailInfo> infoList = new ArrayList<>();
+    private UserData data;
     private LayoutInflater mInflater;
 
     private AdapterItemClickListener mClickListener;
@@ -26,23 +27,22 @@ public class DataDetailAdapter extends RecyclerView.Adapter<DataDetailAdapter.Vi
         this.mInflater = LayoutInflater.from(context);
     }
 
-    public void setData(List<DetailInfo> info) {
-        infoList.clear();
-        infoList.addAll(info);
+    public void setData(UserData data) {
+        this.data = data;
         notifyDataSetChanged();
     }
 
-    public void setData(int position, DetailInfo info) {
-        infoList.set(position, info);
+    public void setData(int position, DataInfo info) {
+        data.getData().set(position, info);
         notifyDataSetChanged();
     }
 
-    public List<DetailInfo> getData() {
-        return infoList;
+    public UserData getData() {
+        return data;
     }
 
-    public DetailInfo getData(int position) {
-        return infoList.get(position);
+    public DataInfo getData(int position) {
+        return data.getData().get(position);
     }
 
     @Override
@@ -72,14 +72,16 @@ public class DataDetailAdapter extends RecyclerView.Adapter<DataDetailAdapter.Vi
 
     @Override
     public void onBindViewHolder(ViewHolder holder, int position) {
-        DetailInfo info = infoList.get(position);
-        holder.tvData.setText(info.getData());
-        holder.tvValue.setText(info.getValues() + "");
+        DataInfo info = data.getData().get(position);
+        holder.tvData.setText(info.getDate());
+        holder.tvValue.setText(info.getValue() + "");
     }
 
     @Override
     public int getItemCount() {
-        return infoList.size();
+        if (data==null)
+            return 0;
+        return data.getData().size();
     }
 
     class ViewHolder extends RecyclerView.ViewHolder {
@@ -95,6 +97,7 @@ public class DataDetailAdapter extends RecyclerView.Adapter<DataDetailAdapter.Vi
     public void setOnItemClickListener(AdapterItemClickListener itemClickListener) {
         this.mClickListener = itemClickListener;
     }
+
     public void setDateClickListener(AdapterDateListener dateClick) {
         this.dateClick = dateClick;
     }

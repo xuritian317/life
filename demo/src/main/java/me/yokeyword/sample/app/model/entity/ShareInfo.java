@@ -5,6 +5,7 @@ import java.util.List;
 import cn.bmob.v3.BmobObject;
 
 /**
+ * 分享数据的实体类
  * Created by xu on 2017/6/21.
  */
 

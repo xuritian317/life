@@ -29,7 +29,6 @@ public class DataContentAdapter extends RecyclerView.Adapter<DataContentAdapter.
     }
 
     public void setData(List<HomePic> items) {
-        mItems.clear();
         mItems.addAll(items);
     }
 

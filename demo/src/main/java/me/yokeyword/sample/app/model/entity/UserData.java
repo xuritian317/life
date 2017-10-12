@@ -1,17 +1,19 @@
 package me.yokeyword.sample.app.model.entity;
 
 import java.util.List;
-
 import cn.bmob.v3.BmobObject;
 
 /**
+ * 用户分析数据的实体类
  * Created by xu on 2017/6/21.
  */
+
 public class UserData extends BmobObject {
 
     private String userTel;
     private String userName;
     private String type;
+
     private List<DataInfo> data;
 
     public UserData(String userTel, String userName, String type, List<DataInfo> data) {

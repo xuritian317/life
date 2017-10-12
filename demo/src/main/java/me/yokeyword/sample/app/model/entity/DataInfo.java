@@ -1,9 +1,8 @@
 package me.yokeyword.sample.app.model.entity;
 
 /**
- * Created by xu on 2017/6/21.
+* Created by xu on 2017/6/21.
  */
-
 public class DataInfo {
     private String date;
     private Integer value;

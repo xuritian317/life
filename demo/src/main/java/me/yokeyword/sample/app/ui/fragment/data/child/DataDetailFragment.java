@@ -14,9 +14,10 @@ import java.util.List;
 import butterknife.BindView;
 import butterknife.OnClick;
 import me.yokeyword.sample.R;
+import me.yokeyword.sample.app.model.entity.DataInfo;
+import me.yokeyword.sample.app.model.entity.UserData;
 import me.yokeyword.sample.app.ui.adapter.DataDetailAdapter;
 import me.yokeyword.sample.app.base.BaseBackFragment;
-import me.yokeyword.sample.app.model.entity.DetailInfo;
 import me.yokeyword.sample.app.ui.listener.AdapterDateListener;
 import me.yokeyword.sample.app.ui.listener.AdapterItemClickListener;
 import me.yokeyword.sample.app.presenter.data.DataDetailPresenter;
@@ -84,9 +85,7 @@ public class DataDetailFragment extends BaseBackFragment<DataDetailPresenter> im
         adapter.setOnItemClickListener(new AdapterItemClickListener() {
             @Override
             public void onItemClick(int position, View view, RecyclerView.ViewHolder vh) {
-
-                presenter.showDialog(_mActivity, adapter.getData(position), position);
-
+                presenter.showDialog(_mActivity, adapter.getData(), position);
             }
         });
 
@@ -116,9 +115,8 @@ public class DataDetailFragment extends BaseBackFragment<DataDetailPresenter> im
         mToolbar.setTitle(type);
         initToolbarNav(mToolbar);
     }
-
     @Override
-    public void changeData(int position, DetailInfo info) {
+    public void changeData(int position, DataInfo info) {
         adapter.setData(position, info);
     }
 
@@ -133,14 +131,14 @@ public class DataDetailFragment extends BaseBackFragment<DataDetailPresenter> im
     }
 
     @Override
-    public void setAdapterData(List<DetailInfo> infos) {
-        adapter.setData(infos);
+    public void setAdapterData(UserData data) {
+        adapter.setData(data);
     }
 
 
     @Override
     public void loge(String msg) {
-        Logger.e("msg","");
+        Logger.e("msg", "");
     }
 
     @Override
@@ -151,6 +149,13 @@ public class DataDetailFragment extends BaseBackFragment<DataDetailPresenter> im
                 refreshLayout.setRefreshing(false);
             }
         }, 2000);
+    }
+
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        Logger.e("onDestroyView", "true");
+
     }
 
 }

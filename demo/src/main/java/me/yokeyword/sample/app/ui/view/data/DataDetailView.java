@@ -2,7 +2,8 @@ package me.yokeyword.sample.app.ui.view.data;
 
 import java.util.List;
 
-import me.yokeyword.sample.app.model.entity.DetailInfo;
+import me.yokeyword.sample.app.model.entity.DataInfo;
+import me.yokeyword.sample.app.model.entity.UserData;
 import me.yokeyword.sample.app.ui.view.BaseViewInterface;
 
 /**
@@ -10,9 +11,9 @@ import me.yokeyword.sample.app.ui.view.BaseViewInterface;
  */
 
 public interface DataDetailView extends BaseViewInterface {
-    void changeData(int position, DetailInfo info);
+    void changeData(int position, DataInfo info);
     void showToast(String msg);
     void setRefreshLayout(boolean flag);
-    void setAdapterData(List<DetailInfo> infos);
+    void setAdapterData(UserData data);
     void loge(String msg);
 }

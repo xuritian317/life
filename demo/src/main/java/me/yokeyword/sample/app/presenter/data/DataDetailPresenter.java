@@ -10,7 +10,6 @@ import android.widget.TextView;
 import java.util.ArrayList;
 import java.util.List;
 
-import cn.bmob.v3.BmobRealTimeData;
 import cn.bmob.v3.exception.BmobException;
 import me.yokeyword.fragmentation.SupportActivity;
 import me.yokeyword.sample.R;
@@ -38,69 +37,62 @@ public class DataDetailPresenter extends BasePresenter {
 
     private DetailInfoDao dao = DBManager.getInstance().detailInfoDao;
 
-    BmobRealTimeData data;
-
     public void getData(final String type) {
         view.setRefreshLayout(true);
-        List<DetailInfo> lists = dao.queryBuilder().where(DetailInfoDao.Properties.Type.eq(type)).list();
-        if (!lists.isEmpty()) {
-            view.setAdapterData(lists);
-            view.setRefreshLayout(false);
-            return;
-        }
         BmobQueryUserData.getInstance(new BmobQueryUserData.QueryDataCallBack() {
             @Override
-            public void successCallBack(final String userTel, final String userName, List<UserData> infoList) {
-                final List<DetailInfo> detailInfos = new ArrayList<DetailInfo>();
+            public void successCallBack(String userTel, String userName, String type, List<UserData> infoList) {
+                List<DetailInfo> detailInfos = new ArrayList<DetailInfo>();
+                view.setRefreshLayout(false);
                 if (!infoList.isEmpty()) {
-                    for (UserData data : infoList) {
-                        List<DataInfo> dataInfos = data.getData();
-                        for (DataInfo info : dataInfos) {
-                            detailInfos.add(new DetailInfo(data.getObjectId(), data.getUserName(), data.getUserTel(), data.getType(), info.getDate(), info.getValue()));
-                        }
+                    UserData data = infoList.get(0);
+                    view.setAdapterData(data);
+
+                    List<DataInfo> dataInfos = data.getData();
+                    for (DataInfo info : dataInfos) {
+                        detailInfos.add(new DetailInfo(userTel, userName, type, info.getDate(), info.getValue()));
                     }
-                    view.setAdapterData(detailInfos);
+                    dao.updateInTx(detailInfos);
+
+                } else {
+                    List<DataInfo> dataInfos = new ArrayList<DataInfo>();
+                    for (int i = 1; i <= 30; i++) {
+                        int value = (int) (Math.random() * 10000);
+                        dataInfos.add(new DataInfo("1月" + i + "日", value));
+                    }
+                    final UserData data = new UserData(userTel, userName, type, dataInfos);
+
+                    for (DataInfo info : dataInfos) {
+                        detailInfos.add(new DetailInfo(userTel, userName, type, info.getDate(), info.getValue()));
+                    }
                     dao.insertInTx(detailInfos);
-                    view.setRefreshLayout(false);
-                    return;
-                }
 
-                final List<DataInfo> dataInfos = new ArrayList<DataInfo>();
-                for (int i = 1; i <= 30; i++) {
-                    int value = (int) (Math.random() * 10000);
-                    dataInfos.add(new DataInfo("1月" + i + "日", value));
-                }
-
-                UserData data = new UserData(userTel, userName, type, dataInfos);
-                BmobSetUserData.getInstance(new BmobSetUserData.SetDataCallBack() {
-                    @Override
-                    public void successCallBack(String s) {
-                        for (DataInfo info : dataInfos) {
-                            detailInfos.add(new DetailInfo(s, userTel, userName, type, info.getDate(), info.getValue()));
+                    BmobSetUserData.getInstance(new BmobSetUserData.SetDataCallBack() {
+                        @Override
+                        public void successCallBack(String s) {
+                            view.setAdapterData(data);
                         }
-                        view.setAdapterData(detailInfos);
-                        dao.insertInTx(detailInfos);
-                        view.setRefreshLayout(false);
-                    }
-                }).inputUser(data);
+                    }).inputUser(data);
+                }
             }
 
             @Override
             public void failCallBack(String userTel, String userName, BmobException e) {
-
             }
 
         }).getUserData(type);
 
     }
 
-    public void showDialog(SupportActivity mActivity, final DetailInfo info, final int position) {
+    public void showDialog(SupportActivity mActivity, final UserData data, final int position) {
         //弹出对话框
         View dialogView = mActivity.getLayoutInflater().inflate(R.layout.item_dialog, null);
         TextView tvData = (TextView) dialogView.findViewById(R.id.tv_data);
         final EditText edtValue = (EditText) dialogView.findViewById(R.id.edt_value);
 
-        tvData.setText(info.getData());
+        final DataInfo info = data.getData().get(position);
+
+        tvData.setText(info.getDate());
 
         AlertDialog.Builder builder = new AlertDialog.Builder(mActivity)
                 .setIcon(R.drawable.life)
@@ -117,10 +109,11 @@ public class DataDetailPresenter extends BasePresenter {
                     view.showToast("输入不能为空");
                     return;
                 }
-                info.setValues(Integer.parseInt(inputStr));
+                info.setValue(Integer.parseInt(inputStr));
                 view.changeData(position, info);
-                dao.update(info);
-                BmobUpdateUserData.getInstance().updateUserDataValue(info.getObjectId(), position, info.getValues());
+
+
+                BmobUpdateUserData.getInstance().updateUserDataValue(data.getObjectId(), position, info.getValue());
 
             }
         });
@@ -135,7 +128,7 @@ public class DataDetailPresenter extends BasePresenter {
         builder.show();
     }
 
-    public void showCalendarView(SupportActivity mActivity, final List<DetailInfo> infoList, final int position) {
+    public void showCalendarView(SupportActivity mActivity, final UserData data, final int position) {
         //弹出对话框
         View dialogView = mActivity.getLayoutInflater().inflate(R.layout.item_calendar, null);
         final TextView tvMouth = (TextView) dialogView.findViewById(R.id.tv_mouth);
@@ -145,6 +138,8 @@ public class DataDetailPresenter extends BasePresenter {
                 .setIcon(R.drawable.life)
                 .setView(dialogView)
                 .setTitle("请输入日期");
+
+        final List<DataInfo> dataInfos = data.getData();
 
         builder.setPositiveButton("确定", new DialogInterface.OnClickListener() {
             @Override
@@ -160,12 +155,12 @@ public class DataDetailPresenter extends BasePresenter {
                 int day = Integer.parseInt(inputDay);
                 int start = position;
                 for (int i = start; i < 30; i++) {
-                    DetailInfo info = infoList.get(i);
-                    info.setData(mouth + "月" + day + "日");
-                    dao.update(info);
+                    DataInfo info = dataInfos.get(i);
+                    info.setDate(mouth + "月" + day + "日");
+//                    dao.update(info);
                     view.changeData(i, info);
 
-                    infoList.set(i, info);
+                    dataInfos.set(i, info);
 
                     day++;
                     if (mouth == 1 || mouth == 3 || mouth == 5 || mouth == 7 || mouth == 9 || mouth == 11) {
@@ -187,7 +182,7 @@ public class DataDetailPresenter extends BasePresenter {
                     if (mouth > 12)
                         mouth = 1;
                 }
-                BmobUpdateUserData.getInstance().updateUserDate(infoList.get(0).getObjectId(), infoList);
+                BmobUpdateUserData.getInstance().updateUserDate(data.getObjectId(), data, dataInfos);
             }
         });
         builder.setNegativeButton("取消", new DialogInterface.OnClickListener() {

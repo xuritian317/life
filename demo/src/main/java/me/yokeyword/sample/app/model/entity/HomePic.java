@@ -4,6 +4,7 @@ import android.os.Parcel;
 import android.os.Parcelable;
 
 /**
+ * 主页面效果实体类
  * Created by YoKeyword on 16/2/1.
  */
 public class HomePic implements Parcelable {

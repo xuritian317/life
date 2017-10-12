@@ -133,13 +133,14 @@ public class HomeContentFragment extends BaseFragment<HomeContentPresenter> impl
         recyclerView.setLayoutManager(manager);
         recyclerView.setAdapter(mAdapter);
 
+        mAdapter.setData(presenter.getData(mTitles, mImgRes));
+
         mAdapter.setOnItemClickListener(new AdapterItemClickListener() {
             @Override
             public void onItemClick(int position, View view, RecyclerView.ViewHolder vh) {
                 presenter.start(vh, HomeDetailFragment.newInstance(mAdapter.getItem(position)), getString(R.string.image_transition));
             }
         });
-        mAdapter.setData(presenter.getData(mTitles, mImgRes));
 
 
         recyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
